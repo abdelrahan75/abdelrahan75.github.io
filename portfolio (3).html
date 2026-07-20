@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdelrahman Said Gharib — Backend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E14;
+    --bg-elevated:#11151D;
+    --bg-card:#151B26;
+    --line:#232B38;
+    --text:#E6E9F0;
+    --muted:#8A94A6;
+    --domain:#E8C468;   /* core / entities */
+    --application:#5FA8D3; /* use cases / services */
+    --infrastructure:#6FCF97; /* db, frameworks, tooling */
+    --presentation:#C98BDB; /* outward-facing / contact */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- layer label chips ---------- */
+  .layer-label{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:14px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .dot.domain{background:var(--domain);box-shadow:0 0 10px var(--domain);}
+  .dot.application{background:var(--application);box-shadow:0 0 10px var(--application);}
+  .dot.infrastructure{background:var(--infrastructure);box-shadow:0 0 10px var(--infrastructure);}
+  .dot.presentation{background:var(--presentation);box-shadow:0 0 10px var(--presentation);}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:rgba(11,14,20,0.85);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  nav .brand{font-weight:600;font-size:15px;}
+  nav .brand span{color:var(--domain);}
+  nav ul{display:flex;gap:28px;list-style:none;}
+  nav ul li a{font-size:13px;color:var(--muted);transition:color .2s;}
+  nav ul li a:hover{color:var(--text);}
+  .nav-toggle{display:none;}
+  @media(max-width:640px){
+    nav ul{display:none;}
+  }
+
+  /* ---------- hero ---------- */
+  header.hero{
+    min-height:100vh;display:flex;align-items:center;
+    padding-top:64px;position:relative;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;width:100%;
+  }
+  @media(max-width:800px){.hero-grid{grid-template-columns:1fr;}}
+  .eyebrow{font-family:'JetBrains Mono',monospace;color:var(--infrastructure);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:18px;}
+  .hero h1{font-size:clamp(34px,5vw,54px);font-weight:700;line-height:1.08;margin-bottom:18px;}
+  .hero h1 .accent{color:var(--domain);}
+  .hero p.lede{color:var(--muted);font-size:16px;max-width:460px;margin-bottom:28px;}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 18px;border-radius:8px;font-size:14px;font-weight:500;
+    border:1px solid var(--line);transition:all .2s;
+  }
+  .btn.primary{background:var(--domain);color:#1A1405;border-color:var(--domain);}
+  .btn.primary:hover{background:#f0d488;}
+  .btn.ghost{color:var(--text);}
+  .btn.ghost:hover{border-color:var(--muted);}
+
+  /* concentric diagram */
+  .diagram{position:relative;width:100%;max-width:420px;margin:0 auto;aspect-ratio:1/1;}
+  .diagram svg{width:100%;height:100%;}
+  .ring{fill:none;stroke-width:1.4;opacity:0;transform-origin:center;animation:ringIn 1s ease forwards;}
+  .ring.r1{stroke:var(--presentation);animation-delay:.05s;}
+  .ring.r2{stroke:var(--infrastructure);animation-delay:.2s;}
+  .ring.r3{stroke:var(--application);animation-delay:.35s;}
+  .ring.r4{stroke:var(--domain);animation-delay:.5s;}
+  .core{fill:var(--domain);opacity:0;animation:coreIn .6s ease forwards;animation-delay:.7s;}
+  @keyframes ringIn{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+  @keyframes coreIn{from{opacity:0;transform:scale(0);}to{opacity:1;transform:scale(1);}}
+  .diagram text{font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--muted);letter-spacing:.06em;}
+  @media(prefers-reduced-motion: reduce){
+    .ring,.core{animation:none !important;opacity:1 !important;}
+  }
+
+  /* ---------- sections ---------- */
+  section{padding:96px 0;border-top:1px solid var(--line);}
+  section .head{max-width:600px;margin-bottom:48px;}
+  section h2{font-size:28px;font-weight:600;}
+  section p.sub{color:var(--muted);margin-top:10px;font-size:15px;}
+
+  /* about */
+  .about-text{color:var(--muted);font-size:16px;max-width:680px;}
+  .about-text strong{color:var(--text);font-weight:600;}
+
+  /* timeline (experience) */
+  .timeline{border-left:2px solid var(--line);margin-left:6px;}
+  .t-item{position:relative;padding:0 0 40px 32px;}
+  .t-item:last-child{padding-bottom:0;}
+  .t-item::before{
+    content:'';position:absolute;left:-7px;top:4px;width:12px;height:12px;
+    border-radius:50%;background:var(--application);border:2px solid var(--bg);
+  }
+  .t-item .role{font-weight:600;font-size:16px;}
+  .t-item .org{color:var(--application);font-size:14px;margin-top:2px;}
+  .t-item .date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:4px;display:block;}
+  .t-item ul{margin-top:12px;padding-left:18px;color:var(--muted);font-size:14.5px;}
+  .t-item li{margin-bottom:6px;}
+
+  /* projects */
+  .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:700px){.projects-grid{grid-template-columns:1fr;}}
+  .card{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:12px;
+    padding:26px;display:flex;flex-direction:column;
+  }
+  .card h3{font-size:17px;margin-bottom:4px;}
+  .card .meta{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--infrastructure);margin-bottom:14px;}
+  .card ul{padding-left:18px;color:var(--muted);font-size:14px;flex:1;}
+  .card li{margin-bottom:7px;}
+  .card .link{margin-top:16px;font-size:13px;color:var(--domain);display:inline-flex;align-items:center;gap:6px;}
+
+  /* skills */
+  .skills-layers{display:flex;flex-direction:column;gap:14px;}
+  .skill-row{
+    display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:start;
+    padding:16px 18px;background:var(--bg-elevated);border:1px solid var(--line);border-radius:10px;
+  }
+  @media(max-width:600px){.skill-row{grid-template-columns:1fr;gap:8px;}}
+  .skill-row .cat{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding-top:2px;}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{
+    font-size:13px;padding:5px 11px;border-radius:6px;background:var(--bg-card);
+    border:1px solid var(--line);color:var(--text);
+  }
+
+  /* certs + education */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:700px){.two-col{grid-template-columns:1fr;}}
+  .mini-card{background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:20px;}
+  .mini-card h4{font-size:15px;margin-bottom:6px;}
+  .mini-card .issuer{color:var(--muted);font-size:13px;}
+  .mini-card .issuer span{color:var(--infrastructure);}
+
+  /* contact / footer */
+  footer{padding:80px 0 40px;text-align:center;}
+  footer h2{font-size:26px;margin-bottom:12px;}
+  footer p{color:var(--muted);margin-bottom:28px;}
+  .contact-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:40px;}
+  .foot-note{color:var(--muted);font-size:12.5px;font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">Abdelrahman <span>Said</span></div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#credentials">Credentials</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">// backend developer · ASP.NET Core</div>
+      <h1>Building software from the <span class="accent">domain</span> outward.</h1>
+      <p class="lede">Computer Science student at October 6 University and backend intern at DEPI, working in Clean Architecture with ASP.NET Core, EF Core, and SQL Server — with Angular on the front end and competitive programming on the side.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#projects">View projects</a>
+        <a class="btn ghost" href="mailto:bdalrhmnshrawy278@gmail.com">Get in touch</a>
+        <a class="btn ghost" href="https://github.com/abdelrahan75" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="diagram">
+      <svg viewBox="0 0 400 400">
+        <circle class="ring r1" cx="200" cy="200" r="185"></circle>
+        <circle class="ring r2" cx="200" cy="200" r="140"></circle>
+        <circle class="ring r3" cx="200" cy="200" r="95"></circle>
+        <circle class="ring r4" cx="200" cy="200" r="50"></circle>
+        <circle class="core" cx="200" cy="200" r="8"></circle>
+        <text x="200" y="24" text-anchor="middle">PRESENTATION</text>
+        <text x="200" y="68" text-anchor="middle">INFRASTRUCTURE</text>
+        <text x="200" y="113" text-anchor="middle">APPLICATION</text>
+        <text x="200" y="158" text-anchor="middle">DOMAIN</text>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="head">
+      <div class="layer-label"><span class="dot domain"></span>domain</div>
+      <h2>About</h2>
+    </div>
+    <p class="about-text">
+      I'm a <strong>Computer Science & Information Systems</strong> student at October 6 University (GPA 3.4), currently interning with the <strong>Digital Egypt Pioneers Initiative (DEPI)</strong>, building on hands-on training from the <strong>Information Technology Institute (ITI)</strong>. I focus on <strong>ASP.NET Core</strong> backend development — designing domain entities, use cases, and repository abstractions with Clean Architecture — paired with <strong>Angular</strong> on the front end and <strong>SQL Server</strong> for data. Outside of coursework, I compete on Codeforces, currently ranked <strong>Pupil</strong>.
+    </p>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="head">
+      <div class="layer-label"><span class="dot application"></span>application</div>
+      <h2>Experience</h2>
+    </div>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="role">ASP.NET Backend Training</div>
+        <div class="org">Digital Egypt Pioneers Initiative — DEPI (eYouth)</div>
+        <span class="date">07/2025 – Present · Egypt · Remote</span>
+        <ul>
+          <li>Building backend services with ASP.NET Core, Web API, and Entity Framework Core.</li>
+          <li>Working with SQL Server and LINQ for data access and query optimization.</li>
+          <li>Developing MVC applications and RESTful APIs alongside an Angular front end.</li>
+          <li>Collaborating on real-world projects using .NET 8.</li>
+        </ul>
+      </div>
+      <div class="t-item">
+        <div class="role">Backend Development Training</div>
+        <div class="org">Information Technology Institute (ITI)</div>
+        <span class="date">06/2025 – 07/2025 · Egypt</span>
+        <ul>
+          <li>Completed intensive training on ASP.NET Core, C#, and database integration.</li>
+          <li>Practiced MVC architecture, Entity Framework Core, and REST API design.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="head">
+      <div class="layer-label"><span class="dot infrastructure"></span>infrastructure</div>
+      <h2>Projects</h2>
+    </div>
+    <div class="projects-grid">
+      <div class="card">
+        <h3>Badil Platform</h3>
+        <div class="meta">DEPI Graduation Project · Full-Stack Web App · 05/2026</div>
+        <ul>
+          <li>Designed the Domain layer — core entities and repository interfaces — following Domain-Driven principles.</li>
+          <li>Implemented the Application layer with use cases, DTOs, and service abstractions to encapsulate business logic.</li>
+          <li>Built CRUD operations across the app using Clean Architecture patterns to keep concerns separated.</li>
+        </ul>
+        <a class="link" href="https://github.com/abdelrahan75/Badil" target="_blank" rel="noopener">github.com/abdelrahan75/Badil →</a>
+      </div>
+      <div class="card">
+        <h3>Learning Management System</h3>
+        <div class="meta">ITI Training Graduation Project · ASP.NET MVC & Web API</div>
+        <ul>
+          <li>Built a full-stack LMS managing students, courses, departments, and teachers with full CRUD operations.</li>
+          <li>Implemented the Repository Pattern (interface + implementation) per entity for clean separation of concerns.</li>
+          <li>Integrated ASP.NET Identity for authentication with CSRF protection on all forms.</li>
+          <li>Wrote custom server-side validation attributes that query the database at validation time.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="head">
+      <div class="layer-label"><span class="dot presentation"></span>presentation</div>
+      <h2>Skills</h2>
+    </div>
+    <div class="skills-layers">
+      <div class="skill-row">
+        <div class="cat">Back-End</div>
+        <div class="tags">
+          <span class="tag">ASP.NET Core</span><span class="tag">ASP.NET MVC</span>
+          <span class="tag">Web API / REST</span><span class="tag">Entity Framework Core</span>
+          <span class="tag">LINQ</span><span class="tag">.NET 8</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="cat">Front-End</div>
+        <div class="tags"><span class="tag">Angular</span></div>
+      </div>
+      <div class="skill-row">
+        <div class="cat">Database</div>
+        <div class="tags"><span class="tag">SQL Server</span><span class="tag">SQL (Advanced)</span></div>
+      </div>
+      <div class="skill-row">
+        <div class="cat">Programming</div>
+        <div class="tags"><span class="tag">C#</span><span class="tag">C++</span><span class="tag">Java</span></div>
+      </div>
+      <div class="skill-row">
+        <div class="cat">Other</div>
+        <div class="tags"><span class="tag">Problem Solving</span><span class="tag">Git / GitHub</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="credentials">
+  <div class="wrap">
+    <div class="head">
+      <div class="layer-label"><span class="dot domain"></span>domain</div>
+      <h2>Credentials</h2>
+    </div>
+    <div class="two-col">
+      <div class="mini-card">
+        <h4>SQL (Advanced) Certificate</h4>
+        <div class="issuer">Issuer: <span>HackerRank</span> · 2026-01</div>
+      </div>
+      <div class="mini-card">
+        <h4>Pupil Rank — Problem Solving</h4>
+        <div class="issuer">Issuer: <span>Codeforces</span></div>
+      </div>
+      <div class="mini-card">
+        <h4>C# (Basic)</h4>
+        <div class="issuer">Core C# structure, types, OOP, collections, exception handling</div>
+      </div>
+      <div class="mini-card">
+        <h4>Bachelor's in CS & Information Systems</h4>
+        <div class="issuer">October 6 University · GPA 3.4 · 10/2023 – Present</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Let's build something.</h2>
+    <p>Open to backend / full-stack opportunities and collaborations.</p>
+    <div class="contact-links">
+      <a class="btn primary" href="mailto:bdalrhmnshrawy278@gmail.com">Email</a>
+      <a class="btn ghost" href="https://github.com/abdelrahan75" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn ghost" href="https://linkedin.com/in/abdelrahman-said-093505403" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost" href="https://codeforces.com/profile/Abdelrahma_said" target="_blank" rel="noopener">Codeforces</a>
+      <a class="btn ghost" href="tel:+201030733313">+20 103 073 3313</a>
+    </div>
+    <div class="foot-note">Giza, Egypt · Arabic (Native) · English (Good)</div>
+  </div>
+</footer>
+
+</body>
+</html>
